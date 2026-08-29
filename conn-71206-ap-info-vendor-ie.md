@@ -28,6 +28,24 @@ Verify the `advertise_ap_info` feature end-to-end:
 
 ## Process
 
+### Step 0: Authenticate (REQUIRED FIRST)
+
+The admin API uses an Okta-backed token that expires. Before anything else, the **user must** run this themselves in the session (it requires interactive Okta login, which the agent cannot perform):
+
+```
+! eero api admin auth
+```
+
+Then verify credentials are valid:
+
+```bash
+eero api admin whoami
+```
+
+**STOP CONDITION:** If `whoami` returns `401 Unauthorized` / `Authentication Required` (or any auth error), **do not continue the test**. The credentials have failed. Instruct the user to run `eero api admin auth` and re-run. Do not attempt to set flags, SSH, or capture beacons without valid admin credentials.
+
+> Note: `eero nimble auth` only creates local device SSH credentials — it does NOT authenticate the admin API. The admin API requires `eero api admin auth` (Okta).
+
 ### Step 1: Verify Firmware
 
 ```bash
